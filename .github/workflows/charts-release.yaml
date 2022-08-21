@@ -15,17 +15,17 @@ jobs:
     name: Auto-generate chart README
     runs-on: ubuntu-20.04
     steps:
-    - name: Get k8s-at-home token
-      id: get-app-token
-      uses: getsentry/action-github-app-token@v1
-      with:
-        app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
-        private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
+    # - name: Get k8s-at-home token
+    #   id: get-app-token
+    #   uses: getsentry/action-github-app-token@v1
+    #   with:
+    #     app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
+    #     private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
 
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ steps.get-app-token.outputs.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         ref: ${{ github.ref }}
 
     - uses: dorny/paths-filter@v2
@@ -95,17 +95,17 @@ jobs:
     needs:
     - generate-readme
     steps:
-    - name: Get k8s-at-home token
-      id: get-app-token
-      uses: getsentry/action-github-app-token@v1
-      with:
-        app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
-        private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
+    # - name: Get k8s-at-home token
+    #   id: get-app-token
+    #   uses: getsentry/action-github-app-token@v1
+    #   with:
+    #     app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
+    #     private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
 
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ steps.get-app-token.outputs.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         ref: main
         fetch-depth: 0
 
@@ -125,5 +125,5 @@ jobs:
         charts_dir: charts/*
         charts_repo_url: https://library-charts.k8s-at-home.com
       env:
-        CR_TOKEN: "${{ steps.get-app-token.outputs.token }}"
+        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         CR_SKIP_EXISTING: "true"
