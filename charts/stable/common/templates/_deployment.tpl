@@ -46,7 +46,7 @@ spec:
       labels:
         {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
-        {{- tpl toYaml . | nindent 8 }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
     spec:
       {{- include "common.controller.pod" . | nindent 6 }}
