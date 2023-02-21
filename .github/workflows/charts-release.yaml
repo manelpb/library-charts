@@ -85,9 +85,9 @@ jobs:
       with:
         push_options: --force
         commit_message: Auto-generate chart README [no ci]
-        commit_user_name: k8s-at-home[bot]
-        commit_user_email: k8s-at-home[bot]@users.noreply.github.com
-        commit_author: k8s-at-home[bot] <k8s-at-home[bot]@users.noreply.github.com>
+        # commit_user_name: k8s-at-home[bot]
+        # commit_user_email: k8s-at-home[bot]@users.noreply.github.com
+        # commit_author: k8s-at-home[bot] <k8s-at-home[bot]@users.noreply.github.com>
         file_pattern: charts/**/
 
   release-charts:
