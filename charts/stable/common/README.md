@@ -1,6 +1,6 @@
 # common
 
-![Version: 4.5.4](https://img.shields.io/badge/Version-4.5.4-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 4.5.4](https://img.shields.io/badge/Version-4.5.5-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for k8s-at-home charts
 
