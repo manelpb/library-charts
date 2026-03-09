@@ -10,33 +10,31 @@ on:
 jobs:
   lint:
     name: Lint charts
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.list-changed.outputs.changed }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.5.4
+      uses: azure/setup-helm@v4
 
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
-        python-version: 3.7
+        python-version: "3.12"
 
     - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.2.1
+      uses: helm/chart-testing-action@v2.7.0
 
     - name: Run chart-testing (list-changed)
       id: list-changed
       run: |
         changed=$(ct list-changed --config .github/ct-lint.yaml)
         if [[ -n "$changed" ]]; then
-          echo "::set-output name=changed::true"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Run chart-testing (lint)
@@ -48,17 +46,15 @@ jobs:
     needs:
     - lint
     name: Run unit tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.5.4
+      uses: azure/setup-helm@v4
 
     - name: Run tests
       run: |
@@ -70,29 +66,27 @@ jobs:
     needs:
     - lint
     name: Install charts
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.5.4
+      uses: azure/setup-helm@v4
 
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
-        python-version: 3.7
+        python-version: "3.12"
 
     - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.2.1
+      uses: helm/chart-testing-action@v2.7.0
 
     - name: Create k3d cluster
       uses: nolar/setup-k3d-k3s@v1
       with:
-        version: v1.19
+        version: v1.28
       if: needs.lint.outputs.changed == 'true'
 
     - name: Run chart-testing (install)

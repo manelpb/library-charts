@@ -1,17 +1,13 @@
 apiVersion: v2
 name: common
-description: Function library for k8s-at-home charts
+description: A general-purpose Helm library chart for Kubernetes applications
 type: library
-version: 4.5.8
-kubeVersion: ">=1.16.0-0"
+version: 5.0.0
+kubeVersion: ">=1.23.0-0"
 keywords:
-  - k8s-at-home
   - common
-home: https://github.com/manelpb/library-charts/tree/main/stable/common
+  - library
+  - helm
+home: https://github.com/manelpb/library-charts/tree/main/charts/stable/common
 maintainers:
-  - name: bjw-s
-    email: me@bjw-s.dev
-  - name: onedr0p
-    email: devin.kray@gmail.com
-  - name: dirtycajunrice
-    email: nick@cajun.pro
+  - name: manelpb

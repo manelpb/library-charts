@@ -1,5 +1,7 @@
 {{- define "custom.notes" -}}
-Since a lot of the {{ template "custom.repository.organization" . }} charts follow a similar pattern, this library was built to reduce maintenance cost between the charts that use it and try achieve a goal of being DRY.
+This library chart provides common templates and helpers to reduce maintenance cost between Helm charts that use it, following a DRY approach.
+
+Originally based on the [k8s-at-home](https://github.com/k8s-at-home/library-charts) common library (no longer maintained).
 {{- end -}}
 
 {{- define "custom.custom.configuration.header" -}}
@@ -21,9 +23,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 4.5.1
+  version: 5.0.0
   repository: {{ template "custom.helm.url" }}
 ```
-
-For more information, take a look at the [Docs](http://docs.k8s-at-home.com/our-helm-charts/common-library/).
 {{- end -}}

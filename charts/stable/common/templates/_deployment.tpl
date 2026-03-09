@@ -16,10 +16,13 @@ metadata:
   {{- end }}
 spec:
   revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
-  {{- if not .Values.autoscaling.enabled -}}
+  {{- with .Values.controller.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ . }}
+  {{- end }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicas }}
   {{- end }}
-  {{- $strategy := default "Recreate" .Values.controller.strategy }}
+  {{- $strategy := default "RollingUpdate" .Values.controller.strategy }}
   {{- if and (ne $strategy "Recreate") (ne $strategy "RollingUpdate") }}
     {{- fail (printf "Not a valid strategy type for Deployment (%s)" $strategy) }}
   {{- end }}

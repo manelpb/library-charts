@@ -2,15 +2,13 @@ apiVersion: v2
 name: common-test
 description: Helper chart to test different use cases of the common library
 version: 0.1.0
-kubeVersion: ">=1.16.0-0"
+kubeVersion: ">=1.23.0-0"
 keywords:
-- k8s-at-home
 - common
-home: https://github.com/k8s-at-home/library-charts/tree/main/stable/common-test
+home: https://github.com/manelpb/library-charts/tree/main/helper-charts/common-test
 maintainers:
-- name: bjw-s
-  email: me@bjw-s.dev
+- name: manelpb
 dependencies:
 - name: common
   repository: file://../../charts/stable/common
-  version: n/a
+  version: 5.0.0
