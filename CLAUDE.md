@@ -48,6 +48,13 @@ helm template test . -f ci/basic-values.yaml  # Render and inspect
 helm unittest -f "tests/**/*_test.yaml" .      # Run unit tests
 ```
 
+**Always run `helm unittest` locally before pushing.** The unittest plugin is `helm-unittest/helm-unittest` (not the old `vbehar/helm3-unittest`).
+
+Key testing notes:
+- Tests that render Services must set `service.main.ports.http.port` — ports with nil values are skipped
+- Empty `annotations:` or `ports:` blocks cause YAML parse errors in the unittest plugin — always make these conditional in templates
+- Ingress tests use `networking.k8s.io/v1` format (`service.name`/`service.port.number`), not the legacy `serviceName`/`servicePort`
+
 ## Releasing
 
 - Bump `version` in `charts/stable/common/Chart.yaml`

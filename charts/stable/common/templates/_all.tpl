@@ -5,7 +5,7 @@ Main entrypoint for the common library chart. It will render all underlying temp
   {{- /* Merge the local chart values and the common chart defaults */ -}}
   {{- include "common.values.setup" . }}
 
-  {{ include "common.configmap" . | nindent 0 }}
+  {{- include "common.configmap" . }}
 
   {{- /* Build the templates */ -}}
   {{- include "common.pvc" . }}
