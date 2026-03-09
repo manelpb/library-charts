@@ -4,6 +4,7 @@ templates:
 tests:
   - it: default should pass
     set:
+      service.main.ports.http.port: 8080
       ingress.main.enabled: true
     asserts:
       - documentIndex: &IngressDocument 2
@@ -13,11 +14,14 @@ tests:
         equal:
           path: spec.rules[0].http.paths[0].backend
           value:
-            serviceName: RELEASE-NAME-common-test
-            servicePort: null
+            service:
+              name: RELEASE-NAME-common-test
+              port:
+                number: 8080
 
   - it: custom service reference should pass
     set:
+      service.main.ports.http.port: 8080
       ingress.main:
         enabled: true
         hosts:
@@ -35,5 +39,7 @@ tests:
         equal:
           path: spec.rules[0].http.paths[0].backend
           value:
-            serviceName: pathService
-            servicePort: 1234
+            service:
+              name: pathService
+              port:
+                number: 1234

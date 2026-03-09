@@ -3,6 +3,8 @@ templates:
   - common.yaml
 tests:
   - it: default should pass
+    set:
+      service.main.ports.http.port: 8080
     asserts:
       - hasDocuments:
           count: 2
@@ -16,6 +18,7 @@ tests:
 
   - it: explicit TCP should pass
     set:
+      service.main.ports.http.port: 8080
       service.main.ports.http.protocol: TCP
     asserts:
       - documentIndex: &ServiceDocument 1
@@ -28,6 +31,7 @@ tests:
 
   - it: explicit UDP should pass
     set:
+      service.main.ports.http.port: 8080
       service.main.ports.http.protocol: UDP
     asserts:
       - documentIndex: &ServiceDocument 1
@@ -40,6 +44,7 @@ tests:
 
   - it: explicit HTTP should pass
     set:
+      service.main.ports.http.port: 8080
       service.main.ports.http.protocol: HTTP
     asserts:
       - documentIndex: &ServiceDocument 1
@@ -55,6 +60,7 @@ tests:
 
   - it: explicit HTTPS should pass
     set:
+      service.main.ports.http.port: 8080
       service.main.ports.http.protocol: HTTPS
     asserts:
       - documentIndex: &ServiceDocument 1

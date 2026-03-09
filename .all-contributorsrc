@@ -1,6 +1,6 @@
 {
   "projectName": "library-charts",
-  "projectOwner": "k8s-at-home",
+  "projectOwner": "manelpb",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -8,98 +8,7 @@
   ],
   "imageSize": 100,
   "commit": false,
-  "contributors": [
-    {
-      "login": "bjw-s",
-      "name": "Bᴇʀɴᴅ Sᴄʜᴏʀɢᴇʀs",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6213398?v=4",
-      "profile": "https://github.com/bjw-s",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "onedr0p",
-      "name": "ᗪєνιη ᗷυнʟ",
-      "avatar_url": "https://avatars.githubusercontent.com/u/213795?v=4",
-      "profile": "https://github.com/onedr0p",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "angelnu",
-      "name": "Angel Nunez Mencias",
-      "avatar_url": "https://avatars.githubusercontent.com/u/4406403?v=4",
-      "profile": "https://github.com/angelnu",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "wrmilling",
-      "name": "Winston R. Milling",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6162814?v=4",
-      "profile": "https://winston.milli.ng/",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "dirtycajunrice",
-      "name": "Nicholas St. Germain",
-      "avatar_url": "https://avatars.githubusercontent.com/u/15788890?v=4",
-      "profile": "https://cajun.pro/",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "billtomturner",
-      "name": "billtomturner",
-      "avatar_url": "https://avatars.githubusercontent.com/u/65121940?v=4",
-      "profile": "https://github.com/billtomturner",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "jr0dd",
-      "name": "jr0dd",
-      "avatar_url": "https://avatars.githubusercontent.com/u/285797?v=4",
-      "profile": "https://github.com/jr0dd",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "allenporter",
-      "name": "Allen Porter",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6026418?v=4",
-      "profile": "https://github.com/allenporter",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "AlexanderBabel",
-      "name": "Alex Babel",
-      "avatar_url": "https://avatars.githubusercontent.com/u/13570439?v=4",
-      "profile": "http://alexbabel.com",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "Cian911",
-      "name": "Cian Gallagher",
-      "avatar_url": "https://avatars.githubusercontent.com/u/4751449?v=4",
-      "profile": "https://ciangallagher.net",
-      "contributions": [
-        "code"
-      ]
-    }
-  ],
+  "contributors": [],
   "contributorsPerLine": 7,
   "commitConvention": "none",
   "skipCi": true

@@ -3,6 +3,8 @@ templates:
   - common.yaml
 tests:
   - it: default should pass
+    set:
+      service.main.ports.http.port: 8080
     asserts:
       - hasDocuments:
           count: 2
@@ -14,7 +16,7 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: null
+            port: 8080
             protocol: TCP
             targetPort: http
 
@@ -48,6 +50,7 @@ tests:
           ports:
             http:
               enabled: true
+              port: 8080
               targetPort: 80
     asserts:
       - documentIndex: &ServiceDocument 1
@@ -58,6 +61,6 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: null
+            port: 8080
             protocol: TCP
             targetPort: 80

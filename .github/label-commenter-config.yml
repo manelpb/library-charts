@@ -9,24 +9,11 @@ labels:
         locking: lock
         lock_reason: resolved
 
-  - name: kind:support
-    labeled:
-      issue:
-        body: |
-          :wave: @{{ issue.user.login }}, we use the issue tracker exclusively
-          for bug reports and feature requests. However, this issue appears
-          to be a support request. Please use our support channels
-          to get help.
-          - [Docs](https://docs.k8s-at-home.com/)
-          - [Discord](https://discord.gg/sTMX7Vh)
-          - [GitHub Discussions](https://github.com/k8s-at-home/organization/discussions)
-        action: close
-
   - name: kind:incomplete-docs
     labeled:
       pr:
         body: |
-          :wave: @{{ pull_request.user.login }}, thanks for taking the time to submit this PR. 🙏🏽
+          :wave: @{{ pull_request.user.login }}, thanks for taking the time to submit this PR.
 
           We have noticed that the chart documentation has not been completely updated for this PR.
           Could you please make sure that the following items have been updated:
@@ -40,10 +27,10 @@ labels:
     labeled:
       pr:
         body: |
-          :wave: @{{ pull_request.user.login }}, thanks for taking the time to submit this PR. 🙏🏽
+          :wave: @{{ pull_request.user.login }}, thanks for taking the time to submit this PR.
 
           We have noticed that the PR title does not adhere to our desired format.
           Could you please make sure that it follows the pattern `[<lowercase chart name>] <Update description>`?
-          Example: `[radarr] Update image version`.
+          Example: `[common] Update deployment strategy default`.
 
           Thanks!

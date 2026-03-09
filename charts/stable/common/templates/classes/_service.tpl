@@ -24,12 +24,16 @@ metadata:
   {{- with (merge ($values.labels | default dict) (include "common.labels" $ | fromYaml)) }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- $hasHttps := eq ( $primaryPort.protocol | default "" ) "HTTPS" -}}
+  {{- $mergedAnnotations := merge ($values.annotations | default dict) (include "common.annotations" $ | fromYaml) -}}
+  {{- if or $hasHttps $mergedAnnotations }}
   annotations:
-  {{- if eq ( $primaryPort.protocol | default "" ) "HTTPS" }}
+    {{- if $hasHttps }}
     traefik.ingress.kubernetes.io/service.serversscheme: https
-  {{- end }}
-  {{- with (merge ($values.annotations | default dict) (include "common.annotations" $ | fromYaml)) }}
-    {{ toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with $mergedAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if (or (eq $svcType "ClusterIP") (empty $svcType)) }}
@@ -73,9 +77,16 @@ spec:
   ipFamilies:
     {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- $hasPorts := false -}}
+  {{- range $name, $port := $values.ports }}
+    {{- if and $port.enabled $port.port -}}
+      {{- $hasPorts = true -}}
+    {{- end }}
+  {{- end }}
+  {{- if $hasPorts }}
   ports:
   {{- range $name, $port := $values.ports }}
-  {{- if $port.enabled }}
+  {{- if and $port.enabled $port.port }}
   - port: {{ $port.port }}
     targetPort: {{ $port.targetPort | default $name }}
     {{- if $port.protocol }}
@@ -92,6 +103,9 @@ spec:
     nodePort: {{ $port.nodePort }}
     {{ end }}
   {{- end }}
+  {{- end }}
+  {{- else }}
+  ports: []
   {{- end }}
   selector:
     {{- include "common.labels.selectorLabels" . | nindent 4 }}
