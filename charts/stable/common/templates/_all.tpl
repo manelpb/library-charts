@@ -34,6 +34,8 @@ Main entrypoint for the common library chart. It will render all underlying temp
 
   {{ include "common.classes.hpa" . | nindent 0 }}
 
+  {{ include "common.podDisruptionBudget" . | nindent 0 }}
+
   {{ include "common.service" . | nindent 0 }}
 
   {{ include "common.ingress" .  | nindent 0 }}

@@ -111,6 +111,24 @@ autoscaling:
   targetCPUUtilizationPercentage:  # 80
   targetMemoryUtilizationPercentage:  # 80
 
+# -- Add a PodDisruptionBudget for the controller's pods.
+# Set only one of `minAvailable` or `maxUnavailable`. If neither is set,
+# `minAvailable: 1` is used. The selector is wired to the chart's pods.
+# @default -- <disabled>
+podDisruptionBudget:
+  enabled: false
+  # -- Minimum number/percentage of pods that must remain available.
+  minAvailable:  # 1
+  # -- Maximum number/percentage of pods that can be unavailable.
+  maxUnavailable:  # "50%"
+  # -- Eviction policy for unhealthy pods (Kubernetes >=1.27).
+  # Options: IfHealthyBudget (default), AlwaysAllow.
+  unhealthyPodEvictionPolicy:
+  # -- Labels to add to the PodDisruptionBudget
+  labels: {}
+  # -- Annotations to add to the PodDisruptionBudget
+  annotations: {}
+
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: false

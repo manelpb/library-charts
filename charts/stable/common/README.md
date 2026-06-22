@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.2.0](https://img.shields.io/badge/Version-5.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.3.0](https://img.shields.io/badge/Version-5.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -153,6 +153,12 @@ N/A
 | persistence.shared.medium | string | `nil` | Set the medium to "Memory" to mount a tmpfs (RAM-backed filesystem) instead of the storage medium that backs the node. |
 | persistence.shared.sizeLimit | string | `nil` | If the `SizeMemoryBackedVolumes` feature gate is enabled, you can specify a size for memory backed volumes. |
 | podAnnotations | object | `{}` | Set annotations on the pod |
+| podDisruptionBudget | object | <disabled> | Add a PodDisruptionBudget for the controller's pods. Set only one of `minAvailable` or `maxUnavailable`. If neither is set, `minAvailable: 1` is used. The selector is wired to the chart's pods. |
+| podDisruptionBudget.annotations | object | `{}` | Annotations to add to the PodDisruptionBudget |
+| podDisruptionBudget.labels | object | `{}` | Labels to add to the PodDisruptionBudget |
+| podDisruptionBudget.maxUnavailable | string | `nil` | Maximum number/percentage of pods that can be unavailable. |
+| podDisruptionBudget.minAvailable | string | `nil` | Minimum number/percentage of pods that must remain available. |
+| podDisruptionBudget.unhealthyPodEvictionPolicy | string | `nil` | Eviction policy for unhealthy pods (Kubernetes >=1.27). Options: IfHealthyBudget (default), AlwaysAllow. |
 | podLabels | object | `{}` | Set labels on the pod |
 | podSecurityContext | object | `{}` | Configure the Security Context for the Pod |
 | priorityClassName | string | `nil` | Custom priority class for different treatment by the scheduler |
@@ -207,6 +213,12 @@ All notable changes to this library Helm chart will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [5.3.0]
+
+#### Added
+
+- `podDisruptionBudget` block — render a `policy/v1` PodDisruptionBudget whose selector is wired to the chart's pods. Set `minAvailable` or `maxUnavailable` (defaults to `minAvailable: 1`).
 
 ### [5.2.0]
 
@@ -283,6 +295,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.3.0]: #530
 [5.2.0]: #520
 [5.1.0]: #510
 [5.0.1]: #501
