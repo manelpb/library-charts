@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.0.0](https://img.shields.io/badge/Version-5.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.1.0](https://img.shields.io/badge/Version-5.1.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -77,6 +77,22 @@ N/A
 | enableServiceLinks | bool | `true` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
 | env | string | `nil` | Main environment variables. Template enabled. Syntax options: A) TZ: UTC B) PASSWD: '{{ .Release.Name }}' C) PASSWD:      configMapKeyRef:        name: config-map-name        key: key-name D) PASSWD:      valueFrom:        secretKeyRef:          name: secret-name          key: key-name      ... E) - name: TZ      value: UTC F) - name: TZ      value: '{{ .Release.Name }}' |
 | envFrom | list | `[]` | Secrets and/or ConfigMaps that will be loaded as environment variables. [[ref]](https://unofficial-kubernetes.readthedocs.io/en/latest/tasks/configure-pod-container/configmap/#use-case-consume-configmap-in-environment-variables) |
+| externalSecrets | object | See below | Configure ExternalSecrets (External Secrets Operator) for the chart here. Each key creates an `ExternalSecret` that syncs from an existing SecretStore/ClusterSecretStore into a Kubernetes Secret. The store itself is NOT created by this chart. Additional items can be added by adding a dictionary key similar to 'main'. |
+| externalSecrets.main.annotations | object | `{}` | Annotations to add to the ExternalSecret |
+| externalSecrets.main.data | list | `[]` | Pull individual keys from a remote secret. [[ref]](https://external-secrets.io/latest/api/externalsecret/) |
+| externalSecrets.main.dataFrom | list | `[]` | Pull entire remote secrets. [[ref]](https://external-secrets.io/latest/api/externalsecret/) |
+| externalSecrets.main.enabled | bool | `false` | Enables or disables the ExternalSecret |
+| externalSecrets.main.labels | object | `{}` | Labels to add to the ExternalSecret |
+| externalSecrets.main.nameOverride | string | `nil` | Override the name suffix used for this ExternalSecret (and its target Secret) |
+| externalSecrets.main.refreshInterval | string | `"1h"` | How often the operator reconciles the secret. Omitted from output if empty. |
+| externalSecrets.main.secretStoreRef | object | `{"kind":"ClusterSecretStore","name":null}` | Reference to an existing SecretStore or ClusterSecretStore. |
+| externalSecrets.main.secretStoreRef.kind | string | `"ClusterSecretStore"` | Kind of store. Options: `ClusterSecretStore` (default) or `SecretStore`. |
+| externalSecrets.main.secretStoreRef.name | string | `nil` | Name of the (Cluster)SecretStore. Required when enabled. |
+| externalSecrets.main.target | object | See below | Target Kubernetes Secret configuration. |
+| externalSecrets.main.target.creationPolicy | string | `"Owner"` | creationPolicy for the target Secret. Options: Owner (default), Orphan, Merge, None. |
+| externalSecrets.main.target.deletionPolicy | string | `nil` | deletionPolicy for the target Secret. Options: Retain, Delete, Merge. |
+| externalSecrets.main.target.secretName | string | `nil` | Name of the resulting Secret. Defaults to the ExternalSecret name. |
+| externalSecrets.main.target.template | object | `{}` | Template used to shape the resulting Secret (e.g. build a connection string). |
 | global.annotations | object | `{}` | Set additional global annotations. Helm templates can be used. |
 | global.fullnameOverride | string | `nil` | Set the entire name definition |
 | global.labels | object | `{}` | Set additional global labels. Helm templates can be used. |
@@ -176,6 +192,12 @@ All notable changes to this library Helm chart will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [5.1.0]
+
+#### Added
+
+- Support for ExternalSecrets (External Secrets Operator). Declare `external-secrets.io/v1` `ExternalSecret` resources via the new `externalSecrets` dictionary. Each entry references an existing SecretStore/ClusterSecretStore and supports `data`, `dataFrom`, and `target.template`.
+
 ### [5.0.0]
 
 #### Changed
@@ -231,6 +253,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.1.0]: #510
 [5.0.0]: #500
 [4.5.9]: #459
 

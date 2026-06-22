@@ -1,0 +1,60 @@
+suite: externalsecret basic
+templates:
+  - common.yaml
+tests:
+  - it: renders an ExternalSecret with secretStoreRef and dataFrom
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: my-store
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: ExternalSecret
+      - documentIndex: 0
+        isAPIVersion:
+          of: external-secrets.io/v1
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-common-test-main
+      - documentIndex: 0
+        equal:
+          path: spec.secretStoreRef.name
+          value: my-store
+      - documentIndex: 0
+        equal:
+          path: spec.secretStoreRef.kind
+          value: ClusterSecretStore
+      - documentIndex: 0
+        equal:
+          path: spec.target.name
+          value: RELEASE-NAME-common-test-main
+      - documentIndex: 0
+        equal:
+          path: spec.target.creationPolicy
+          value: Owner
+      - documentIndex: 0
+        equal:
+          path: spec.dataFrom[0].extract.key
+          value: my-remote-secret
+
+  - it: is not rendered when disabled
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: false
+          secretStoreRef:
+            name: my-store
+    asserts:
+      - hasDocuments:
+          count: 0

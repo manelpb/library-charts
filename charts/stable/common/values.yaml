@@ -93,6 +93,62 @@ automountServiceAccountToken: true
 secret: {}
   # PASSWORD: my-password
 
+# -- Configure ExternalSecrets (External Secrets Operator) for the chart here.
+# Each key creates an `ExternalSecret` that syncs from an existing
+# SecretStore/ClusterSecretStore into a Kubernetes Secret. The store itself is
+# NOT created by this chart. Additional items can be added by adding a
+# dictionary key similar to 'main'.
+# @default -- See below
+externalSecrets:
+  main:
+    # -- Enables or disables the ExternalSecret
+    enabled: false
+
+    # -- Override the name suffix used for this ExternalSecret (and its target Secret)
+    nameOverride:
+
+    # -- Labels to add to the ExternalSecret
+    labels: {}
+
+    # -- Annotations to add to the ExternalSecret
+    annotations: {}
+
+    # -- How often the operator reconciles the secret. Omitted from output if empty.
+    refreshInterval: 1h
+
+    # -- Reference to an existing SecretStore or ClusterSecretStore.
+    secretStoreRef:
+      # -- Name of the (Cluster)SecretStore. Required when enabled.
+      name:
+      # -- Kind of store. Options: `ClusterSecretStore` (default) or `SecretStore`.
+      kind: ClusterSecretStore
+
+    # -- Target Kubernetes Secret configuration.
+    # @default -- See below
+    target:
+      # -- Name of the resulting Secret. Defaults to the ExternalSecret name.
+      secretName:
+      # -- creationPolicy for the target Secret. Options: Owner (default), Orphan, Merge, None.
+      creationPolicy: Owner
+      # -- deletionPolicy for the target Secret. Options: Retain, Delete, Merge.
+      deletionPolicy:
+      # -- Template used to shape the resulting Secret (e.g. build a connection string).
+      template: {}
+
+    # -- Pull entire remote secrets.
+    # [[ref]](https://external-secrets.io/latest/api/externalsecret/)
+    dataFrom: []
+    #  - extract:
+    #      key: my-remote-secret
+
+    # -- Pull individual keys from a remote secret.
+    # [[ref]](https://external-secrets.io/latest/api/externalsecret/)
+    data: []
+    #  - secretKey: password
+    #    remoteRef:
+    #      key: my-remote-secret
+    #      property: password
+
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
 # @default -- See below
