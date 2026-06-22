@@ -1,0 +1,45 @@
+suite: pod labels
+templates:
+  - common.yaml
+tests:
+  - it: deployment should template podLabels
+    set:
+      controller.type: deployment
+      podLabels:
+        releaseRef: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.metadata.labels.releaseRef
+          value: RELEASE-NAME
+
+  - it: statefulset should template podLabels
+    set:
+      controller.type: statefulset
+      podLabels:
+        releaseRef: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: StatefulSet
+      - documentIndex: 0
+        equal:
+          path: spec.template.metadata.labels.releaseRef
+          value: RELEASE-NAME
+
+  - it: daemonset should template podLabels
+    set:
+      controller.type: daemonset
+      podLabels:
+        releaseRef: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: DaemonSet
+      - documentIndex: 0
+        equal:
+          path: spec.template.metadata.labels.releaseRef
+          value: RELEASE-NAME

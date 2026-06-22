@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.0.0](https://img.shields.io/badge/Version-5.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.0.1](https://img.shields.io/badge/Version-5.0.1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -129,7 +129,7 @@ N/A
 | probes.liveness.custom | bool | `false` | Set this to `true` if you wish to specify your own livenessProbe |
 | probes.liveness.enabled | bool | `true` | Enable the liveness probe |
 | probes.liveness.spec | object | See below | The spec field contains the values for the default livenessProbe. If you selected `custom: true`, this field holds the definition of the livenessProbe. |
-| probes.readiness | object | See below | Redainess probe configuration |
+| probes.readiness | object | See below | Readiness probe configuration |
 | probes.readiness.custom | bool | `false` | Set this to `true` if you wish to specify your own readinessProbe |
 | probes.readiness.enabled | bool | `true` | Enable the readiness probe |
 | probes.readiness.spec | object | See below | The spec field contains the values for the default readinessProbe. If you selected `custom: true`, this field holds the definition of the readinessProbe. |
@@ -175,6 +175,14 @@ All notable changes to this library Helm chart will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [5.0.1]
+
+#### Fixed
+
+- StatefulSet `podLabels` are now processed through `tpl`, matching Deployment and DaemonSet.
+- Container ports gathered from multiple services are de-duplicated to avoid duplicate `containerPort`/port-name entries that Kubernetes rejects.
+- NOTES output: ingress host/path are templated and `https` is detected correctly for TLS-enabled ingresses.
 
 ### [5.0.0]
 
@@ -231,6 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.0.1]: #501
 [5.0.0]: #500
 [4.5.9]: #459
 

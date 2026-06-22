@@ -1,0 +1,65 @@
+suite: container ports dedup
+templates:
+  - common.yaml
+tests:
+  - it: should collapse identical ports shared by multiple services
+    set:
+      service:
+        main:
+          enabled: true
+          primary: true
+          ports:
+            http:
+              enabled: true
+              primary: true
+              port: 80
+        lb:
+          enabled: true
+          type: LoadBalancer
+          ports:
+            http:
+              enabled: true
+              primary: true
+              port: 80
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        lengthEqual:
+          path: spec.template.spec.containers[0].ports
+          count: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            name: http
+            containerPort: 80
+            protocol: TCP
+
+  - it: should keep distinct ports from multiple services
+    set:
+      service:
+        main:
+          enabled: true
+          primary: true
+          ports:
+            http:
+              enabled: true
+              primary: true
+              port: 80
+        metrics:
+          enabled: true
+          ports:
+            metrics:
+              enabled: true
+              primary: true
+              port: 9090
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        lengthEqual:
+          path: spec.template.spec.containers[0].ports
+          count: 2
