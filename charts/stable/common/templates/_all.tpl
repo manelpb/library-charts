@@ -40,6 +40,10 @@ Main entrypoint for the common library chart. It will render all underlying temp
 
   {{ include "common.ingress" .  | nindent 0 }}
 
+  {{ include "common.serviceMonitor" . | nindent 0 }}
+
+  {{ include "common.podMonitor" . | nindent 0 }}
+
   {{- if .Values.secret -}}
     {{ include "common.secret" .  | nindent 0 }}
   {{- end -}}

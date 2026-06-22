@@ -1,0 +1,45 @@
+suite: podmonitor
+templates:
+  - common.yaml
+tests:
+  - it: renders with podMetricsEndpoints, auto selector and namespaceSelector
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      podMonitor:
+        enabled: true
+        podMetricsEndpoints:
+          - port: metrics
+            path: /metrics
+            interval: 30s
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: PodMonitor
+      - documentIndex: 0
+        isAPIVersion:
+          of: monitoring.coreos.com/v1
+      - documentIndex: 0
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/name: common-test
+            app.kubernetes.io/instance: RELEASE-NAME
+      - documentIndex: 0
+        equal:
+          path: spec.namespaceSelector.matchNames[0]
+          value: NAMESPACE
+      - documentIndex: 0
+        equal:
+          path: spec.podMetricsEndpoints[0].port
+          value: metrics
+
+  - it: fails when enabled without podMetricsEndpoints
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      podMonitor:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "podMonitor.podMetricsEndpoints is required when podMonitor is enabled"

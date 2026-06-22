@@ -129,6 +129,50 @@ podDisruptionBudget:
   # -- Annotations to add to the PodDisruptionBudget
   annotations: {}
 
+# -- Add a Prometheus Operator ServiceMonitor. Selector and namespaceSelector
+# are wired to the chart's service automatically. Requires the Prometheus
+# Operator CRDs.
+# @default -- <disabled>
+serviceMonitor:
+  enabled: false
+  # -- Scrape endpoints. If empty, a single endpoint is derived from the
+  # primary service port using `path`/`interval` below.
+  endpoints: []
+    # - port: metrics
+    #   path: /metrics
+    #   interval: 30s
+  # -- Default scrape path for the derived endpoint.
+  path:  # /metrics
+  # -- Default scrape interval for the derived endpoint.
+  interval:  # 30s
+  # -- Default scrape timeout for the derived endpoint.
+  scrapeTimeout:
+  # -- jobLabel to use for the scrape job.
+  jobLabel:
+  # -- Service labels to transfer onto the scraped target.
+  targetLabels: []
+  # -- Extra labels (e.g. `release: kube-prometheus-stack` for Prometheus selection).
+  labels: {}
+  # -- Annotations to add to the ServiceMonitor.
+  annotations: {}
+
+# -- Add a Prometheus Operator PodMonitor. Selector and namespaceSelector are
+# wired to the chart's pods automatically. Requires the Prometheus Operator CRDs.
+# @default -- <disabled>
+podMonitor:
+  enabled: false
+  # -- Pod scrape endpoints. Required when enabled.
+  podMetricsEndpoints: []
+    # - port: metrics
+    #   path: /metrics
+    #   interval: 30s
+  # -- jobLabel to use for the scrape job.
+  jobLabel:
+  # -- Extra labels (e.g. `release: kube-prometheus-stack`).
+  labels: {}
+  # -- Annotations to add to the PodMonitor.
+  annotations: {}
+
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: false

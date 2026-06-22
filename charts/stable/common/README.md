@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.3.0](https://img.shields.io/badge/Version-5.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.4.0](https://img.shields.io/badge/Version-5.4.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -160,6 +160,11 @@ N/A
 | podDisruptionBudget.minAvailable | string | `nil` | Minimum number/percentage of pods that must remain available. |
 | podDisruptionBudget.unhealthyPodEvictionPolicy | string | `nil` | Eviction policy for unhealthy pods (Kubernetes >=1.27). Options: IfHealthyBudget (default), AlwaysAllow. |
 | podLabels | object | `{}` | Set labels on the pod |
+| podMonitor | object | <disabled> | Add a Prometheus Operator PodMonitor. Selector and namespaceSelector are wired to the chart's pods automatically. Requires the Prometheus Operator CRDs. |
+| podMonitor.annotations | object | `{}` | Annotations to add to the PodMonitor. |
+| podMonitor.jobLabel | string | `nil` | jobLabel to use for the scrape job. |
+| podMonitor.labels | object | `{}` | Extra labels (e.g. `release: kube-prometheus-stack`). |
+| podMonitor.podMetricsEndpoints | list | `[]` | Pod scrape endpoints. Required when enabled. |
 | podSecurityContext | object | `{}` | Configure the Security Context for the Pod |
 | priorityClassName | string | `nil` | Custom priority class for different treatment by the scheduler |
 | probes | object | See below | [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
@@ -200,6 +205,15 @@ N/A
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `false` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
+| serviceMonitor | object | <disabled> | Add a Prometheus Operator ServiceMonitor. Selector and namespaceSelector are wired to the chart's service automatically. Requires the Prometheus Operator CRDs. |
+| serviceMonitor.annotations | object | `{}` | Annotations to add to the ServiceMonitor. |
+| serviceMonitor.endpoints | list | `[]` | Scrape endpoints. If empty, a single endpoint is derived from the primary service port using `path`/`interval` below. |
+| serviceMonitor.interval | string | `nil` | Default scrape interval for the derived endpoint. |
+| serviceMonitor.jobLabel | string | `nil` | jobLabel to use for the scrape job. |
+| serviceMonitor.labels | object | `{}` | Extra labels (e.g. `release: kube-prometheus-stack` for Prometheus selection). |
+| serviceMonitor.path | string | `nil` | Default scrape path for the derived endpoint. |
+| serviceMonitor.scrapeTimeout | string | `nil` | Default scrape timeout for the derived endpoint. |
+| serviceMonitor.targetLabels | list | `[]` | Service labels to transfer onto the scraped target. |
 | termination.gracePeriodSeconds | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
 | termination.messagePath | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | termination.messagePolicy | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
@@ -213,6 +227,12 @@ All notable changes to this library Helm chart will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [5.4.0]
+
+#### Added
+
+- `serviceMonitor` and `podMonitor` blocks — render Prometheus Operator `ServiceMonitor`/`PodMonitor` resources with selector and namespaceSelector wired to the chart automatically. ServiceMonitor derives a default endpoint from the primary service port when none is given.
 
 ### [5.3.0]
 
@@ -295,6 +315,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.4.0]: #540
 [5.3.0]: #530
 [5.2.0]: #520
 [5.1.0]: #510
