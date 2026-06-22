@@ -2,6 +2,23 @@ apiVersion: v1
 entries:
   common:
   - apiVersion: v2
+    created: "2026-06-22T21:07:45.405699346Z"
+    description: A general-purpose Helm library chart for Kubernetes applications
+    digest: 5e0d4d7177dcb50dd16179bca238a57b954620c1a421e789f11842aa0528f363
+    home: https://github.com/manelpb/library-charts/tree/main/charts/stable/common
+    keywords:
+    - common
+    - library
+    - helm
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - name: manelpb
+    name: common
+    type: library
+    urls:
+    - https://github.com/manelpb/library-charts/releases/download/common-5.4.0/common-5.4.0.tgz
+    version: 5.4.0
+  - apiVersion: v2
     created: "2026-06-22T20:47:57.339672909Z"
     description: A general-purpose Helm library chart for Kubernetes applications
     digest: 98ac881ad1d6f93b95c7fc152d2c3e21d4bb374b693a4d5cc7062096da05d8c8
@@ -233,4 +250,4 @@ entries:
     urls:
     - https://github.com/manelpb/library-charts/releases/download/common-4.5.2/common-4.5.2.tgz
     version: 4.5.2
-generated: "2026-06-22T20:47:57.339727116Z"
+generated: "2026-06-22T21:07:45.405824616Z"
