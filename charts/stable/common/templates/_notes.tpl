@@ -21,21 +21,15 @@ Default NOTES.txt content.
 
 {{- if $primaryIngress }}
 1. Access the application by visiting one of these URL's:
-{{ range $primaryIngress.hosts }}
+{{ range $primaryIngress.hosts -}}
   {{- $protocol := "http" -}}
-  {{ if $primaryIngress.tls -}}
-    {{- $prefix = "https" -}}
-  {{ end -}}
-  {{- $host := .host -}}
-  {{ if .hostTpl -}}
-    {{- $host = tpl .hostTpl $ -}}
-  {{ end }}
-  {{- $path := (first .paths).path | default "/" -}}
-  {{ if (first .paths).pathTpl -}}
-    {{- $path = tpl (first .paths).pathTpl $ -}}
-  {{ end }}
-  - {{ $protocol }}://{{- $host }}{{- $path }}
-{{- end }}
+  {{- if $primaryIngress.tls -}}
+    {{- $protocol = "https" -}}
+  {{- end -}}
+  {{- $host := tpl .host $ -}}
+  {{- $path := tpl ((first .paths).path | default "/") $ }}
+  - {{ $protocol }}://{{ $host }}{{ $path }}
+{{ end -}}
 {{- else if and $primaryService $primaryPort }}
 1. Get the application URL by running these commands:
 {{- if contains "NodePort" $primaryService.type }}
