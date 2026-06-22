@@ -187,6 +187,32 @@ serviceAccount:
 # -- Specifies whether a service account token should be automatically mounted.
 automountServiceAccountToken: true
 
+# -- Configure RBAC for the chart here. Each key creates a Role/ClusterRole
+# (with the given rules) plus a matching binding wired to the chart's
+# ServiceAccount. Set an existing role to bind to it instead of creating one.
+# Typically used together with `serviceAccount.create: true`.
+# @default -- See below
+rbac:
+  main:
+    # -- Enables or disables this RBAC item
+    enabled: false
+    # -- Role scope. Options: `Role` (namespaced) or `ClusterRole`.
+    type: Role
+    # -- Override the name suffix used for the role and binding.
+    nameOverride:
+    # -- Bind to this existing (Cluster)Role instead of creating one.
+    # When set, `rules` is ignored and no role is created.
+    existingRole:
+    # -- Policy rules. Required unless `existingRole` is set.
+    rules: []
+      # - apiGroups: [""]
+      #   resources: [pods]
+      #   verbs: [get, list, watch]
+    # -- Labels to add to the role and binding
+    labels: {}
+    # -- Annotations to add to the role and binding
+    annotations: {}
+
 # -- Use this to populate a secret with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
 # to anybody with access to the values.yaml file.

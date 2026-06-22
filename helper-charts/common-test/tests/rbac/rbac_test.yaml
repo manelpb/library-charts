@@ -1,0 +1,123 @@
+suite: rbac
+templates:
+  - common.yaml
+tests:
+  - it: is not rendered by default
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: creates a Role and RoleBinding bound to the service account
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      serviceAccount:
+        name: my-sa
+      rbac:
+        main:
+          enabled: true
+          type: Role
+          rules:
+            - apiGroups: [""]
+              resources: [pods]
+              verbs: [get, list, watch]
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentSelector:
+          path: kind
+          value: Role
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-common-test-main
+      - documentSelector:
+          path: kind
+          value: Role
+        equal:
+          path: metadata.namespace
+          value: NAMESPACE
+      - documentSelector:
+          path: kind
+          value: Role
+        equal:
+          path: rules[0].resources[0]
+          value: pods
+      - documentSelector:
+          path: kind
+          value: RoleBinding
+        equal:
+          path: roleRef.kind
+          value: Role
+      - documentSelector:
+          path: kind
+          value: RoleBinding
+        equal:
+          path: roleRef.name
+          value: RELEASE-NAME-common-test-main
+      - documentSelector:
+          path: kind
+          value: RoleBinding
+        equal:
+          path: subjects[0].name
+          value: my-sa
+
+  - it: creates a ClusterRole and ClusterRoleBinding
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      rbac:
+        main:
+          enabled: true
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: [nodes]
+              verbs: [get, list]
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentSelector:
+          path: kind
+          value: ClusterRole
+        notExists:
+          path: metadata.namespace
+      - documentSelector:
+          path: kind
+          value: ClusterRoleBinding
+        equal:
+          path: roleRef.kind
+          value: ClusterRole
+
+  - it: binds to an existing role without creating one
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      rbac:
+        main:
+          enabled: true
+          type: ClusterRole
+          existingRole: read-services-pods
+    asserts:
+      - hasDocuments:
+          count: 1
+      - documentSelector:
+          path: kind
+          value: ClusterRoleBinding
+        equal:
+          path: roleRef.name
+          value: read-services-pods
+
+  - it: fails when creating a role without rules
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      rbac:
+        main:
+          enabled: true
+          type: Role
+    asserts:
+      - failedTemplate:
+          errorMessage: "rbac main: rules are required when not using existingRole"

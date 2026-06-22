@@ -16,6 +16,8 @@ Main entrypoint for the common library chart. It will render all underlying temp
     {{- include "common.serviceAccount" . }}
   {{- end -}}
 
+  {{ include "common.rbac" . | nindent 0 }}
+
   {{- if .Values.controller.enabled }}
     {{- if eq .Values.controller.type "deployment" }}
       {{- include "common.deployment" . | nindent 0 }}
