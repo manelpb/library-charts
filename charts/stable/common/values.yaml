@@ -257,7 +257,7 @@ probes:
       timeoutSeconds: 1
       failureThreshold: 3
 
-  # -- Redainess probe configuration
+  # -- Readiness probe configuration
   # @default -- See below
   readiness:
     # -- Enable the readiness probe

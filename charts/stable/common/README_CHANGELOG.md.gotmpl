@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for ExternalSecrets (External Secrets Operator). Declare `external-secrets.io/v1` `ExternalSecret` resources via the new `externalSecrets` dictionary. Each entry references an existing SecretStore/ClusterSecretStore and supports `data`, `dataFrom`, and `target.template`.
 
+### [5.0.1]
+
+#### Fixed
+
+- StatefulSet `podLabels` are now processed through `tpl`, matching Deployment and DaemonSet.
+- Container ports gathered from multiple services are de-duplicated to avoid duplicate `containerPort`/port-name entries that Kubernetes rejects.
+- NOTES output: ingress host/path are templated and `https` is detected correctly for TLS-enabled ingresses.
+
 ### [5.0.0]
 
 #### Changed
@@ -72,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `valueFrom` now works correctly when `env` is a list of variables.
 
 [5.1.0]: #510
+[5.0.1]: #501
 [5.0.0]: #500
 [4.5.9]: #459
 {{- end -}}
