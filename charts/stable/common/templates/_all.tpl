@@ -7,6 +7,8 @@ Main entrypoint for the common library chart. It will render all underlying temp
 
   {{- include "common.configmap" . }}
 
+  {{- include "common.externalsecret" . }}
+
   {{- /* Build the templates */ -}}
   {{- include "common.pvc" . }}
 

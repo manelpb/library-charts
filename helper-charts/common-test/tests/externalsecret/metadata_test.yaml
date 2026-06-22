@@ -1,0 +1,67 @@
+suite: externalsecret metadata
+templates:
+  - common.yaml
+tests:
+  - it: default metadata should pass
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: my-store
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+    asserts:
+      - documentIndex: 0
+        isNull:
+          path: metadata.annotations
+      - documentIndex: 0
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: common-test
+            helm.sh/chart: common-test-0.1.0
+
+  - it: custom and global metadata should merge
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      global:
+        labels:
+          global_label: test
+        annotations:
+          global_annotation: test
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: my-store
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+          labels:
+            test_label: test
+          annotations:
+            test_annotation: test
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: metadata.annotations
+          value:
+            global_annotation: test
+            test_annotation: test
+      - documentIndex: 0
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: common-test
+            global_label: test
+            helm.sh/chart: common-test-0.1.0
+            test_label: test

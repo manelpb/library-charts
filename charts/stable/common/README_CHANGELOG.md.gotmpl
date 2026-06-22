@@ -10,6 +10,12 @@ All notable changes to this library Helm chart will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [5.1.0]
+
+#### Added
+
+- Support for ExternalSecrets (External Secrets Operator). Declare `external-secrets.io/v1` `ExternalSecret` resources via the new `externalSecrets` dictionary. Each entry references an existing SecretStore/ClusterSecretStore and supports `data`, `dataFrom`, and `target.template`.
+
 ### [5.0.1]
 
 #### Fixed
@@ -73,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.1.0]: #510
 [5.0.1]: #501
 [5.0.0]: #500
 [4.5.9]: #459

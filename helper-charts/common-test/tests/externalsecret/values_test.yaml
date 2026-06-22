@@ -1,0 +1,155 @@
+suite: externalsecret values
+templates:
+  - common.yaml
+tests:
+  - it: allows overriding the secretStoreRef kind
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: my-store
+            kind: SecretStore
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: spec.secretStoreRef.kind
+          value: SecretStore
+
+  - it: honours nameOverride for the resource and default target name
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          nameOverride: creds
+          secretStoreRef:
+            name: my-store
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-common-test-creds
+      - documentIndex: 0
+        equal:
+          path: spec.target.name
+          value: RELEASE-NAME-common-test-creds
+
+  - it: passes through data, refreshInterval, and a custom target
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          refreshInterval: 30m
+          secretStoreRef:
+            name: my-store
+          target:
+            secretName: app-secret
+            creationPolicy: Merge
+            deletionPolicy: Retain
+            template:
+              type: kubernetes.io/dockerconfigjson
+          data:
+            - secretKey: password
+              remoteRef:
+                key: db
+                property: password
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: spec.refreshInterval
+          value: 30m
+      - documentIndex: 0
+        equal:
+          path: spec.target.name
+          value: app-secret
+      - documentIndex: 0
+        equal:
+          path: spec.target.creationPolicy
+          value: Merge
+      - documentIndex: 0
+        equal:
+          path: spec.target.deletionPolicy
+          value: Retain
+      - documentIndex: 0
+        equal:
+          path: spec.target.template.type
+          value: kubernetes.io/dockerconfigjson
+      - documentIndex: 0
+        equal:
+          path: spec.data[0].secretKey
+          value: password
+      - documentIndex: 0
+        equal:
+          path: spec.data[0].remoteRef.property
+          value: password
+      - documentIndex: 0
+        notExists:
+          path: spec.dataFrom
+
+  - it: renders an empty data list when neither data nor dataFrom is set
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: my-store
+          target:
+            template:
+              data:
+                config: "{{ printf `%s` `value` }}"
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: spec.data
+          value: []
+
+  - it: fails when secretStoreRef.name is missing
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          dataFrom:
+            - extract:
+                key: my-remote-secret
+    asserts:
+      - failedTemplate:
+          errorMessage: "secretStoreRef.name is required for externalSecret RELEASE-NAME-common-test-main"
+
+  - it: renders multiple external secrets
+    set:
+      controller.enabled: false
+      service.main.enabled: false
+      externalSecrets:
+        main:
+          enabled: true
+          secretStoreRef:
+            name: store-a
+          dataFrom:
+            - extract:
+                key: a
+        extra:
+          enabled: true
+          secretStoreRef:
+            name: store-b
+          dataFrom:
+            - extract:
+                key: b
+    asserts:
+      - hasDocuments:
+          count: 2
