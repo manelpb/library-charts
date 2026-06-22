@@ -15,19 +15,19 @@ jobs:
       changed: ${{ steps.list-changed.outputs.changed }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v4
+      uses: azure/setup-helm@v5
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: "3.12"
 
     - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.7.0
+      uses: helm/chart-testing-action@v2.8.0
 
     - name: Run chart-testing (list-changed)
       id: list-changed
@@ -49,12 +49,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v4
+      uses: azure/setup-helm@v5
 
     - name: Run tests
       run: |
@@ -69,19 +69,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v4
+      uses: azure/setup-helm@v5
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: "3.12"
 
     - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.7.0
+      uses: helm/chart-testing-action@v2.8.0
 
     - name: Create k3d cluster
       uses: nolar/setup-k3d-k3s@v1
