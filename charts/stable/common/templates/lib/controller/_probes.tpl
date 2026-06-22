@@ -10,12 +10,13 @@ Probes selection logic.
 
 {{- range $probeName, $probe := .Values.probes }}
   {{- if $probe.enabled -}}
-    {{- "" | nindent 0 }}
-    {{- $probeName }}Probe:
     {{- if $probe.custom -}}
+      {{- "" | nindent 0 }}
+      {{- $probeName }}Probe:
       {{- $probe.spec | toYaml | nindent 2 }}
-    {{- else }}
-      {{- if and $primaryService $primaryPort -}}
+    {{- else if and $primaryService $primaryPort -}}
+      {{- "" | nindent 0 }}
+      {{- $probeName }}Probe:
         {{- "tcpSocket:" | nindent 2 }}
           {{- if $primaryPort.targetPort }}
             {{- printf "port: %v" $primaryPort.targetPort | nindent 4 }}
@@ -26,7 +27,6 @@ Probes selection logic.
         {{- printf "failureThreshold: %v" $probe.spec.failureThreshold  | nindent 2 }}
         {{- printf "timeoutSeconds: %v" $probe.spec.timeoutSeconds  | nindent 2 }}
         {{- printf "periodSeconds: %v" $probe.spec.periodSeconds | nindent 2 }}
-      {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}

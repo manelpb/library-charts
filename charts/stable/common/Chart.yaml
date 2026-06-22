@@ -2,7 +2,7 @@ apiVersion: v2
 name: common
 description: A general-purpose Helm library chart for Kubernetes applications
 type: library
-version: 5.1.0
+version: 5.2.0
 kubeVersion: ">=1.23.0-0"
 keywords:
   - common

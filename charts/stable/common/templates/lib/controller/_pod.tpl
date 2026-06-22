@@ -39,6 +39,9 @@ dnsConfig:
     {{- toYaml . | nindent 2 }}
   {{- end }}
 enableServiceLinks: {{ .Values.enableServiceLinks }}
+  {{- if or (eq .Values.controller.type "cronjob") (eq .Values.controller.type "job") }}
+restartPolicy: {{ .Values.controller.restartPolicy | default "Never" }}
+  {{- end }}
   {{- with .Values.termination.gracePeriodSeconds }}
 terminationGracePeriodSeconds: {{ . }}
   {{- end }}

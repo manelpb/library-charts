@@ -1,0 +1,38 @@
+suite: controller job
+templates:
+  - common.yaml
+tests:
+  - it: renders a Job reusing the pod/container spec
+    set:
+      controller:
+        type: job
+        job:
+          backoffLimit: 4
+          ttlSecondsAfterFinished: 3600
+        restartPolicy: OnFailure
+      service:
+        main:
+          enabled: false
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Job
+      - documentIndex: 0
+        isAPIVersion:
+          of: batch/v1
+      - documentIndex: 0
+        equal:
+          path: spec.backoffLimit
+          value: 4
+      - documentIndex: 0
+        equal:
+          path: spec.ttlSecondsAfterFinished
+          value: 3600
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.restartPolicy
+          value: OnFailure
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].image
+          value: "b4bz/homer:latest"
