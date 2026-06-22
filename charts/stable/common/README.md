@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.4.0](https://img.shields.io/badge/Version-5.4.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.5.0](https://img.shields.io/badge/Version-5.5.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -180,6 +180,14 @@ N/A
 | probes.startup.custom | bool | `false` | Set this to `true` if you wish to specify your own startupProbe |
 | probes.startup.enabled | bool | `true` | Enable the startup probe |
 | probes.startup.spec | object | See below | The spec field contains the values for the default startupProbe. If you selected `custom: true`, this field holds the definition of the startupProbe. |
+| rbac | object | See below | Configure RBAC for the chart here. Each key creates a Role/ClusterRole (with the given rules) plus a matching binding wired to the chart's ServiceAccount. Set an existing role to bind to it instead of creating one. Typically used together with `serviceAccount.create: true`. |
+| rbac.main.annotations | object | `{}` | Annotations to add to the role and binding |
+| rbac.main.enabled | bool | `false` | Enables or disables this RBAC item |
+| rbac.main.existingRole | string | `nil` | Bind to this existing (Cluster)Role instead of creating one. When set, `rules` is ignored and no role is created. |
+| rbac.main.labels | object | `{}` | Labels to add to the role and binding |
+| rbac.main.nameOverride | string | `nil` | Override the name suffix used for the role and binding. |
+| rbac.main.rules | list | `[]` | Policy rules. Required unless `existingRole` is set. |
+| rbac.main.type | string | `"Role"` | Role scope. Options: `Role` (namespaced) or `ClusterRole`. |
 | resources | object | `{}` | Set the resource requests / limits for the main container. |
 | runtimeClassName | string | `nil` | Allow specifying a runtimeClassName other than the default one (ie: nvidia) |
 | schedulerName | string | `nil` | Allows specifying a custom scheduler name |
@@ -227,6 +235,12 @@ All notable changes to this library Helm chart will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [5.5.0]
+
+#### Added
+
+- `rbac` block — create Role/ClusterRole plus a matching RoleBinding/ClusterRoleBinding wired to the chart's ServiceAccount. Supply `rules`, or bind to an `existingRole`.
 
 ### [5.4.0]
 
@@ -315,6 +329,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.5.0]: #550
 [5.4.0]: #540
 [5.3.0]: #530
 [5.2.0]: #520
