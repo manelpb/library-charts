@@ -48,8 +48,10 @@
         name: {{ include "common.names.fullname" . }}
     {{- end }}
   {{- end }}
+  {{- with (include "common.controller.ports" . | trim) }}
   ports:
-  {{- include "common.controller.ports" . | trim | nindent 4 }}
+    {{- . | nindent 4 }}
+  {{- end }}
   {{- with (include "common.controller.volumeMounts" . | trim) }}
   volumeMounts:
     {{- nindent 4 . }}

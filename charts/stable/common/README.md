@@ -1,6 +1,6 @@
 # common
 
-![Version: 5.1.0](https://img.shields.io/badge/Version-5.1.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 5.2.0](https://img.shields.io/badge/Version-5.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 A general-purpose Helm library chart for Kubernetes applications
 
@@ -61,17 +61,33 @@ N/A
 | configmap.config.enabled | bool | `false` | Enables or disables the configMap |
 | configmap.config.labels | object | `{}` | Labels to add to the configMap |
 | controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset |
+| controller.cronjob | object | See below | CronJob configuration. Only used when `controller.type` is `cronjob`. |
+| controller.cronjob.concurrencyPolicy | string | `nil` | How to treat concurrent executions. Options: Allow, Forbid, Replace. |
+| controller.cronjob.failedJobsHistoryLimit | string | `nil` | How many failed jobs to keep. |
+| controller.cronjob.schedule | string | `nil` | Cron schedule. Required when `controller.type` is `cronjob`. |
+| controller.cronjob.startingDeadlineSeconds | string | `nil` | Deadline in seconds for starting a job if it misses its schedule. |
+| controller.cronjob.successfulJobsHistoryLimit | string | `nil` | How many completed jobs to keep. |
+| controller.cronjob.suspend | string | `nil` | Suspend subsequent executions. |
+| controller.cronjob.timeZone | string | `nil` | IANA time zone for the schedule (Kubernetes >=1.27). |
 | controller.enabled | bool | `true` | enable the controller. |
+| controller.job | object | See below | Job configuration. Used when `controller.type` is `cronjob` or `job`. |
+| controller.job.activeDeadlineSeconds | string | `nil` | Deadline in seconds before the job is terminated. |
+| controller.job.backoffLimit | string | `nil` | Number of retries before marking the job failed. |
+| controller.job.completionMode | string | `nil` | Job completion mode. Options: NonIndexed (default), Indexed. |
+| controller.job.completions | string | `nil` | Desired number of successfully finished pods. |
+| controller.job.parallelism | string | `nil` | Maximum desired number of pods running at any instant. |
+| controller.job.ttlSecondsAfterFinished | string | `nil` | TTL in seconds to clean up a finished job. `0` deletes immediately. |
 | controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset |
 | controller.podManagementPolicy | string | `nil` | Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default). |
 | controller.progressDeadlineSeconds | string | `nil` | Set the maximum time in seconds for a deployment to make progress before being considered failed. This helps ArgoCD detect stuck rollouts (e.g. ImagePullBackOff). Defaults to 600 (Kubernetes default). Only applies to Deployments. |
 | controller.replicas | int | `1` | Number of desired pods |
+| controller.restartPolicy | string | `nil` | Pod restartPolicy for `cronjob`/`job` controllers. Defaults to `Never`. Valid options are `Never` and `OnFailure`. |
 | controller.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |
 | controller.rollingUpdate.partition | string | `nil` | Set statefulset RollingUpdate partition |
 | controller.rollingUpdate.surge | string | `nil` | Set deployment RollingUpdate max surge |
 | controller.rollingUpdate.unavailable | string | `nil` | Set deployment RollingUpdate max unavailable |
 | controller.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate and RollingUpdate (default). For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets ignore this. |
-| controller.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset or statefulset |
+| controller.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset, cronjob or job |
 | dnsConfig | object | `{}` | Optional DNS settings, configuring the ndots option may resolve nslookup issues on some Kubernetes setups. |
 | dnsPolicy | string | `nil` | Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true. |
 | enableServiceLinks | bool | `true` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
@@ -192,6 +208,12 @@ All notable changes to this library Helm chart will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [5.2.0]
+
+#### Added
+
+- `controller.type: cronjob` and `controller.type: job` — render `batch/v1` CronJob/Job resources reusing the existing pod and container templating. New `controller.cronjob`, `controller.job`, and `controller.restartPolicy` value blocks.
+
 ### [5.1.0]
 
 #### Added
@@ -261,6 +283,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `valueFrom` now works correctly when `env` is a list of variables.
 
+[5.2.0]: #520
 [5.1.0]: #510
 [5.0.1]: #501
 [5.0.0]: #500

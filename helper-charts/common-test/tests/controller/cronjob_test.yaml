@@ -1,0 +1,58 @@
+suite: controller cronjob
+templates:
+  - common.yaml
+tests:
+  - it: renders a CronJob reusing the pod/container spec
+    set:
+      controller:
+        type: cronjob
+        cronjob:
+          schedule: "0 4 * * *"
+          concurrencyPolicy: Forbid
+          successfulJobsHistoryLimit: 1
+          failedJobsHistoryLimit: 3
+      service:
+        main:
+          enabled: false
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: CronJob
+      - documentIndex: 0
+        isAPIVersion:
+          of: batch/v1
+      - documentIndex: 0
+        equal:
+          path: spec.schedule
+          value: "0 4 * * *"
+      - documentIndex: 0
+        equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - documentIndex: 0
+        equal:
+          path: spec.successfulJobsHistoryLimit
+          value: 1
+      - documentIndex: 0
+        equal:
+          path: spec.failedJobsHistoryLimit
+          value: 3
+      - documentIndex: 0
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
+      - documentIndex: 0
+        equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: "b4bz/homer:latest"
+
+  - it: fails when schedule is missing
+    set:
+      controller:
+        type: cronjob
+      service:
+        main:
+          enabled: false
+    asserts:
+      - failedTemplate:
+          errorMessage: "controller.cronjob.schedule is required when controller.type is cronjob"
