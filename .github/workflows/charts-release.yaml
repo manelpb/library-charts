@@ -96,3 +96,6 @@ jobs:
       env:
         CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         CR_SKIP_EXISTING: "true"
+        # Auto-generate the release name and body from merged PRs/commits
+        # since the previous tag, instead of falling back to the chart description.
+        CR_GENERATE_RELEASE_NOTES: "true"
